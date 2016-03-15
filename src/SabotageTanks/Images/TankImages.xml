@@ -7,13 +7,13 @@ and open the template in the editor.
 
 <tanks>
     
-<tank name = "GREEN">
-    <image name = "moving">GreenTank_Moving.png</image>
-    <image name = "tower">GreenTank_Tower.png</image>
+<tank model = "GREEN">
+    <image type = "moving">GreenTank_Moving.png</image>
+    <image type = "tower">GreenTank_Tower.png</image>
 </tank>
-<tank name = "BLUE">
-    <image name = "moving">BlueTank_Moving.png</image>
-    <image name = "tower">BlueTank_Tower.png</image>
+<tank model = "BLUE">
+    <image type = "moving">BlueTank_Moving.png</image>
+    <image type = "tower">BlueTank_Tower.png</image>
 </tank>
 
 </tanks>

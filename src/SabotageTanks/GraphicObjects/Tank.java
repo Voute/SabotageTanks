@@ -10,43 +10,40 @@ import SabotageTanks.GameLog;
 import SabotageTanks.GameServer;
 import SabotageTanks.Player;
 import static SabotageTanks.Player.TANK_COLORS;
-import SabotageTanks.PlayerState;
-import com.google.gson.annotations.Expose;
+import SabotageTanks.StatePlayer;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author YTokmakov
- */
     public class Tank implements GameObject     // объект для управления - танк
     {
-        @Expose private final String id;
+        transient public final static int WIDTH = 40;
+        transient public final static int HEIGHT = 40;
         
-        @Expose public final static int WIDTH = 40;
-        @Expose public final static int HEIGHT = 40;
-        @Expose public final static double rotationSpeed = 0.02D;
-        @Expose public TankArea area;
+        transient private final static double rotationSpeed = 0.02D;       
+        transient private final static double START_SPEED = 1.5D;
+        transient private final static double ACCELERATION = 0.01D;
+        transient private final static double MAX_SPEED = 3.5D;
+        transient private final static double circumscribedRadius = HEIGHT / Math.sqrt(2);        // радиус описанной окружности
+        transient private final static int BURST_RENDERS_LIMIT = 30;
         
-        @Expose public List<BurstPiece> burstPieces;
-        @Expose private int burstRenders;
-        @Expose private static double speed = 1.5D;
-        @Expose private final static double START_SPEED = 1.5D;
-        @Expose private final static double ACCELERATION = 0.01D;
-        @Expose private final static double MAX_SPEED = 3.5D;
-        @Expose private final static double circumscribedRadius = HEIGHT / Math.sqrt(2);        // радиус описанной окружности
-        @Expose private boolean bursting;
-        @Expose private boolean readyToReset;
+        transient private static double speed = 1.5D;  
+            
+        private final String id;
+        private boolean bursting;
+        private boolean readyForResurrection;
+        private TankArea area;
         
-        @Expose public int XbarrelTip,     // Х координата вершины ствола
-                   YbarrelTip;     // У координата вершины ствола
+        private int Xbarrel,     // Х координата направления ствола
+                    Ybarrel;     // У координата направления ствола
         
-        @Expose private Color color;        // цвет квадрата
+        private Color color;        // цвет квадрата
+        
+        transient private int burstRenders;
         transient private GameServer game;
-        
+        transient private List<BurstPiece> burstPieces;
         
         public Tank(Color color, int Xaxis, int Yaxis, String tankId, GameServer gameServer)
         {
@@ -55,22 +52,20 @@ import java.util.List;
             this.color = color;
             game = gameServer;
             
-            readyToReset = false;
+            readyForResurrection = false;
             
             int x = Xaxis + WIDTH / 2;
             int y = Yaxis + HEIGHT / 2;
             
             area = new TankArea(x, y, circumscribedRadius);
-            burstPieces = new ArrayList<>();
-//            move(new TankMovement());
             
-            XbarrelTip = area.getX();
-            YbarrelTip = Yaxis;
+            Xbarrel = area.getX();
+            Ybarrel = Yaxis;
         }  
         public void shot(int targetX, int targetY)
         {
             try {
-                game.addShell(new Shell(area.getX(), area.getY(), targetX, targetY, XbarrelTip, YbarrelTip, getId()));
+                game.addShell(new Shell(area.getX(), area.getY(), targetX, targetY, Xbarrel, Ybarrel, getId()));
             } catch (Exception ex) {
                 GameLog.write(ex);
             }
@@ -84,8 +79,8 @@ import java.util.List;
                                   Math.pow( Ydelta, 2 )
                                 );
             double radius = WIDTH / 2;            
-            XbarrelTip = area.getX() + (int)(radius * Xdelta / S);
-            YbarrelTip = area.getY() + (int)(radius * Ydelta / S);
+            Xbarrel = area.getX() + (int)(radius * Xdelta / S);
+            Ybarrel = area.getY() + (int)(radius * Ydelta / S);
         }
 //        public void setX(double newX)
 //        {
@@ -103,38 +98,85 @@ import java.util.List;
         {
             return bursting;
         }
-        public boolean getReadyToReset()
+        public boolean getReadyForResurrection()
         {
-            return readyToReset;
+            return readyForResurrection;
         }
-//        // перемещает квадрат на новые координаты
-//        public void move(TankMovement movement)
-//        {
-//            if (!bursting)
-//            {
-//                if ( movement.isNoMovement() )
-//                {
-//                    stopAcceleration();
-//                }
-//
-//
-//                rotation += movement.rotationShift;
-//                x += area.calculateXshift(rotation, movement.movementShift);
-//                y += area.calculateYshift(rotation, movement.movementShift);
-//                area.calculateNewLocation(getX(), getY(), circumscribedRadius, rotation);
-//
-//                calculateBarrel(movement.cursorX, movement.cursorY);
-//            } else
-//            {
-//                if (!burstPieces.isEmpty())
-//                {
-//                    for (BurstPiece piece:burstPieces)
-//                    {
-//                        piece.tick();
-//                    }
-//                }
-//            }
-//        }
+        private void setReadyForResurrection()
+        {
+            burstRenders = 0;
+            readyForResurrection = true;
+            burstPieces = null;
+        }
+        public void tick()
+        {
+            if (bursting)
+            {
+                if (burstPieces == null)
+                {
+                    burstPieces = new ArrayList<>();
+                    burstRenders = 0;
+                    
+                    int[] xx = new int[9];
+                    int[] yy = new int[9];
+                    int half = (int)(HEIGHT / 2);
+
+                    xx[0] = area.getX() - half;
+                    xx[1] = area.getX();
+                    xx[2] = area.getX() + half;
+                    xx[3] = area.getX() - half;
+                    xx[4] = area.getX();
+                    xx[5] = area.getX() + half;
+                    xx[6] = area.getX() - half;
+                    xx[7] = area.getX();
+                    xx[8] = area.getX() + half;
+
+                    yy[0] = area.getY() - half;
+                    yy[1] = area.getY() - half;
+                    yy[2] = area.getY() - half;
+                    yy[3] = area.getY();
+                    yy[4] = area.getY();
+                    yy[5] = area.getY();
+                    yy[6] = area.getY() + half;
+                    yy[7] = area.getY() + half;
+                    yy[8] = area.getY() + half;
+
+                    BurstPiece polygon = new BurstPiece(-1,-1);
+                    polygon.addPoint(xx[0], yy[0]);
+                    polygon.addPoint(xx[1], yy[1]);
+                    polygon.addPoint(xx[4], yy[4]);
+                    polygon.addPoint(xx[3], yy[3]);
+                    burstPieces.add(polygon);
+
+                    polygon = new BurstPiece( 1,-1);
+                    polygon.addPoint(xx[1], yy[1]);
+                    polygon.addPoint(xx[2], yy[2]);
+                    polygon.addPoint(xx[5], yy[5]);
+                    polygon.addPoint(xx[4], yy[4]);
+                    burstPieces.add(polygon);
+
+                    polygon = new BurstPiece( -1, 1);
+                    polygon.addPoint(xx[3], yy[3]);
+                    polygon.addPoint(xx[4], yy[4]);
+                    polygon.addPoint(xx[7], yy[7]);
+                    polygon.addPoint(xx[6], yy[6]);
+                    burstPieces.add(polygon);   
+
+                    polygon = new BurstPiece( 1, 1);
+                    polygon.addPoint(xx[4], yy[4]);
+                    polygon.addPoint(xx[5], yy[5]);
+                    polygon.addPoint(xx[8], yy[8]);
+                    polygon.addPoint(xx[7], yy[7]);
+                    burstPieces.add(polygon);
+                } else
+                {
+                    for (BurstPiece piece : burstPieces)
+                    {
+                        piece.tick();
+                    }                    
+                }
+            }
+        }
         // перекрывают ли границы квадрата указанные границы другого квадрата
         public Polygon assumeMove(double movementShift, double rotationShift)
         {
@@ -168,14 +210,14 @@ import java.util.List;
         {
             return (int)area.getY();
         }
-//        public double getXabsolute()
-//        {
-//            return x;
-//        }
-//        public double getYabsolute()
-//        {
-//            return y;
-//        }
+        public int getXbarrel()
+        {
+            return Xbarrel;
+        }
+        public int getYbarrel()
+        {
+            return Ybarrel;
+        }
         public TankArea getArea()
         {
             return area;
@@ -222,26 +264,17 @@ import java.util.List;
             int randomY = (int) ( Math.random()*(game.getHeight() - HEIGHT) + (int)(HEIGHT / 2) );
             return new Tank(owner.getColor(), randomX, randomY, owner.getName(), game);
         }
-//        public void updateStats(Tank updatingTank)
-//        {
-////            this.bursting = updatingTank.bursting;
-//            if (updatingTank.bursting)
-//            {
-//                this.bursting = true;
-//            }
-//            if (!bursting)
-//            {
-//                this.XbarrelTip = updatingTank.XbarrelTip;
-//                this.YbarrelTip = updatingTank.YbarrelTip;
-//                this.x = updatingTank.x;
-//                this.y = updatingTank.y;
-//                this.rotation = updatingTank.rotation;
-//                this.area = updatingTank.area;        
-//                this.color = updatingTank.color;
-//            }
-//        }
         
-        public void update(PlayerState control)
+        public void updateFields(Tank updatedTank)
+        {
+            area = updatedTank.getArea();
+            Xbarrel = updatedTank.getXbarrel();
+            Ybarrel = updatedTank.getYbarrel();
+            bursting = updatedTank.getBursting();
+            readyForResurrection = updatedTank.getReadyForResurrection();
+        }
+        
+        public void control(StatePlayer control)
         {
             TankMovement movement = new TankMovement();
             
@@ -293,14 +326,6 @@ import java.util.List;
         {
             return circumscribedRadius;
         }
-        
-//        public static Tank generateRandom(int fieldWidth, int fieldHeight, String owner)
-//        {
-//            Color randomColor = TANK_COLORS[ (int)(Math.random()*7) ];
-//            int randomX = (int) ( Math.random()*(fieldWidth - Tank.WIDTH) + (int)Tank.WIDTH / 2 );
-//            int randomY = (int) ( Math.random()*(fieldHeight - Tank.HEIGHT) + (int)Tank.HEIGHT / 2 );
-//            return new Tank(randomColor, randomX, randomY, owner);
-//        }
 
     @Override
     public void draw(Graphics2D graph)
@@ -315,70 +340,13 @@ import java.util.List;
             graph.fillPolygon(area);       
             graph.setColor(Color.BLACK);
             
-            int[] xx = {x, XbarrelTip};
-            int[] yy = {y, YbarrelTip};
+            int[] xx = {x, Xbarrel};
+            int[] yy = {y, Ybarrel};
             graph.drawPolyline(xx, yy, 2);
 
-        } else if (!readyToReset)
+        } else if (!readyForResurrection)
         {
-            if (burstPieces.isEmpty())
-            {
-                burstRenders = 0;
-                
-                int[] xx = new int[9];
-                int[] yy = new int[9];
-                int half = (int)(HEIGHT / 2);
-
-                xx[0] = x - half;
-                xx[1] = x;
-                xx[2] = x + half;
-                xx[3] = x - half;
-                xx[4] = x;
-                xx[5] = x + half;
-                xx[6] = x - half;
-                xx[7] = x;
-                xx[8] = x + half;
-
-                yy[0] = y - half;
-                yy[1] = y - half;
-                yy[2] = y - half;
-                yy[3] = y;
-                yy[4] = y;
-                yy[5] = y;
-                yy[6] = y + half;
-                yy[7] = y + half;
-                yy[8] = y + half;
-
-                BurstPiece polygon = new BurstPiece(-1,-1);
-                polygon.addPoint(xx[0], yy[0]);
-                polygon.addPoint(xx[1], yy[1]);
-                polygon.addPoint(xx[4], yy[4]);
-                polygon.addPoint(xx[3], yy[3]);
-                burstPieces.add(polygon);
-
-                polygon = new BurstPiece( 1,-1);
-                polygon.addPoint(xx[1], yy[1]);
-                polygon.addPoint(xx[2], yy[2]);
-                polygon.addPoint(xx[5], yy[5]);
-                polygon.addPoint(xx[4], yy[4]);
-                burstPieces.add(polygon);
-
-                polygon = new BurstPiece( -1, 1);
-                polygon.addPoint(xx[3], yy[3]);
-                polygon.addPoint(xx[4], yy[4]);
-                polygon.addPoint(xx[7], yy[7]);
-                polygon.addPoint(xx[6], yy[6]);
-                burstPieces.add(polygon);   
-
-                polygon = new BurstPiece( 1, 1);
-                polygon.addPoint(xx[4], yy[4]);
-                polygon.addPoint(xx[5], yy[5]);
-                polygon.addPoint(xx[8], yy[8]);
-                polygon.addPoint(xx[7], yy[7]);
-                burstPieces.add(polygon);
-            }
-            
-            if (burstRenders <= 15)
+            if (burstRenders <= BURST_RENDERS_LIMIT)
             {
                 graph.setColor(color);
                 for (BurstPiece piece:burstPieces)
@@ -388,13 +356,11 @@ import java.util.List;
                 burstRenders++;
             } else
             {
-                burstPieces.clear();
-                readyToReset = true;
+                setReadyForResurrection();
             }
             
         }
     }
-        
 
     private class BurstPiece extends Polygon
     {

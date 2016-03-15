@@ -9,6 +9,7 @@ import static SabotageTanks.GraphicObjects.Tank.HEIGHT;
 import com.google.gson.annotations.Expose;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.util.List;
 
 /**
  *
@@ -16,9 +17,13 @@ import java.awt.Polygon;
  */
 public final class TankArea extends Polygon
 {
-    @Expose private final double radius; 
-    @Expose private double rotation;      // поворот по умолчанию        
-    @Expose private double x,      // координата размещения по оси Х (центр)
+    
+    public List<Tank.BurstPiece> burstPieces;
+    private int burstRenders;
+    
+    private final double radius; 
+    private double rotation;      // поворот по умолчанию        
+    private double x,      // координата размещения по оси Х (центр)
                    y;      // координата размещения по оси У (центр)
     
     public TankArea(double x, double y, double radius)
@@ -38,10 +43,6 @@ public final class TankArea extends Polygon
         this.x = newX;
         this.y = newY;
         this.rotation = newRotation;
-//        this.addPoint((int)(x - (HEIGHT / 2)), (int)(y - (HEIGHT / 2)));
-//        this.addPoint((int)(x + (HEIGHT / 2)), (int)(y - (HEIGHT / 2)));
-//        this.addPoint((int)(x + (HEIGHT / 2)), (int)(y + (HEIGHT / 2)));
-//        this.addPoint((int)(x - (HEIGHT / 2)), (int)(y + (HEIGHT / 2)));
         
         int x0 = (int)(Math.cos(newRotation - Math.PI / 4) * radius);
         int y0 = (int)(Math.sin(newRotation - Math.PI / 4) * radius);
@@ -127,24 +128,13 @@ public final class TankArea extends Polygon
             this.addPoint(point.x, point.y);
         }
     }
-//    public void calculateNewLocation(int x, int y, double rotation)
-//    {
-//        refreshPoints(getPoints(x, y));
-//    }
     public TankArea assumeNewLocation(double movementShift, double rotationShift)
     {
-        
-//                rotation += movement.rotationShift;
-//                x += area.calculateXshift(rotation, movement.movementShift);
-//                y += area.calculateYshift(rotation, movement.movementShift);
-//                area.calculateNewLocation(getX(), getY(), circumscribedRadius, rotation);
-        
         double newRotation = rotation + rotationShift;
 
         double Xnew = x + calculateXshift(newRotation, movementShift);
         double Ynew = y + calculateYshift(newRotation, movementShift);
 
-//        return new TankArea(getPoints(Xnew, Ynew, newRotation), radius, Xnew, Ynew, newRotation);
         return new TankArea(Xnew, Ynew, radius, newRotation);
     }
     public int getX() { return (int)x; }

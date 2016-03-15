@@ -12,25 +12,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author ytokmakov
- */
-
-public final class PlayerState extends State implements Cloneable {
+public final class StatePlayer extends State implements Cloneable {
     
-    @Expose public boolean upPressed,
-                   downPressed,
-                   leftPressed,
-                   rightPressed;
-    @Expose public boolean mouseLeftPressed,
-                   mouseRightPressed,
-                   mouseMiddlePressed;
-    @Expose public int cursorX = 0,
+    public boolean upPressed,
+           downPressed,
+           leftPressed,
+           rightPressed;
+    public boolean mouseLeftPressed,
+           mouseRightPressed,
+           mouseMiddlePressed;
+    public int cursorX = 0,
                cursorY = 0;
-    @Expose public final String id;
+    public final String id;
     
-    public PlayerState(String id)
+    public StatePlayer(String id)
     {
         this.id = id;
     }
@@ -71,24 +66,8 @@ public final class PlayerState extends State implements Cloneable {
         mouseRightPressed =  false;
         mouseMiddlePressed =  false;
     }
-    public PlayerState clone() throws CloneNotSupportedException 
+    public StatePlayer clone() throws CloneNotSupportedException 
     {
-        return (PlayerState)super.clone();
+        return (StatePlayer)super.clone();
     }
 }
-
-
-//public final class StatePlayer extends State {
-//    
-//    Tank tank;
-//    List<Shell> shellList;
-//    
-//    public StatePlayer()
-//    {
-//        shellList = Collections.synchronizedList(new ArrayList<Shell>());
-//    }
-//    public void updateTank(Tank updatingTank)
-//    {
-//        tank.setBursting(updatingTank.getBursting());
-//    }
-//}

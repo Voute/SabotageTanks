@@ -5,11 +5,6 @@
  */
 package SabotageTanks;
 
-
-/**
- *
- * @author ytokmakov
- */
 public abstract class State {
        
 }

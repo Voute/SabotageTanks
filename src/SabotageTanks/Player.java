@@ -11,10 +11,6 @@ import com.google.gson.annotations.Expose;
 import java.awt.Color;
 import java.util.ArrayList;
 
-/**
- *
- * @author ytokmakov
- */
 public final class Player {
     
     //  цвета квадратов    
@@ -27,8 +23,8 @@ public final class Player {
                                                 Color.pink
                                                 };
     
-    @Expose private final String name;
-    @Expose private final Color color;
+    private final String name;
+    private final Color color;
     
     public Player(String playerName, Color playerColor)
     {

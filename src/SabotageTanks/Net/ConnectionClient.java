@@ -8,7 +8,7 @@ package SabotageTanks.Net;
 import SabotageTanks.GameLog;
 import SabotageTanks.Player;
 import SabotageTanks.State;
-import SabotageTanks.PlayerState;
+import SabotageTanks.StatePlayer;
 import SabotageTanks.StateServer;
 import java.io.IOException;
 import java.net.Socket;
@@ -34,7 +34,7 @@ public final class ConnectionClient extends Connection {
     @Override
     public void sendState(State playerControl)
     {
-        send(gson.toJson((PlayerState)playerControl) );
+        send(gson.toJson((StatePlayer)playerControl) );
     }
 
     @Override

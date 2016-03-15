@@ -8,7 +8,7 @@ package SabotageTanks.Net;
 import SabotageTanks.GameLog;
 import SabotageTanks.Player;
 import SabotageTanks.State;
-import SabotageTanks.PlayerState;
+import SabotageTanks.StatePlayer;
 import SabotageTanks.StateServer;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -77,7 +77,7 @@ public final class ConnectionServer extends Connection implements Runnable {
     @Override
     public State receiveState() throws IOException
     {
-        return gson.fromJson(receive(), PlayerState.class);
+        return gson.fromJson(receive(), StatePlayer.class);
     }
     
 }

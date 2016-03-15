@@ -55,14 +55,6 @@ public class ImageLoader extends DefaultHandler
             Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public BufferedImage getTower(String tankName)
-    {
-        for (Tank : currentTankResources)
-        {
-            
-        }
-    }
     
     public TankAnimator getTankAnimator(String tankName)
     {

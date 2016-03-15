@@ -15,14 +15,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- * @author ytokmakov
- */
 public final class StateServer extends State {
     
-    @Expose private List<Tank> tankList;
-    @Expose private List<Shell> shellList;
+    private List<Tank> tankList;
+    private List<Shell> shellList;
     
     public StateServer()
     {
@@ -42,45 +38,8 @@ public final class StateServer extends State {
     {
         tankList.add(tank);
     }
-//    public void updateTank(Tank newTank)
-//    {
-//        Tank tankToUpdate = null;
-//        
-//        if (newTank != null)
-//        {
-//            synchronized (tankList)
-//            {
-//                Iterator iter = tankList.iterator();
-//                while (iter.hasNext())
-//                {
-//                    Tank iterTank = (Tank)iter.next();
-//                    if (iterTank != null)
-//                    {
-//                        if (iterTank.sameId(newTank))
-//                        {
-//                            tankToUpdate = iterTank;
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (tankToUpdate == null)
-//                {
-//                    tankList.add(newTank);
-//                }
-//                else
-//                {
-//                    if (tankCanMove(newTank))
-//                    {
-//                        tankToUpdate.updateStats(newTank);
-//                    }
-//                }            
-//
-//            }
-//        }
-//    }
     
-    public void updatePlayer(PlayerState playerControl)
+    public void updatePlayer(StatePlayer playerControl)
     {
         synchronized(tankList)
         {
@@ -90,7 +49,7 @@ public final class StateServer extends State {
                 Tank tank = (Tank)iter.next();
                 if (tank != null && tank.getId().matches(playerControl.id))
                 {
-                    tank.update(playerControl);
+                    tank.control(playerControl);
                     return;
                 }
             }

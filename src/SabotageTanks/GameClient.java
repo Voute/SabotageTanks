@@ -12,10 +12,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author ytokmakov
- */
 public class GameClient extends Game{
 
     public GameClient(Player player, ConnectionClient connectionServer)
@@ -26,11 +22,7 @@ public class GameClient extends Game{
     @Override
     protected void tick()  
     {
-//        TankMovement playerMovement = control.getPlayerMovement();
-//        if (playerState.tank != null)
-//        {
-//            playerState.tank.move(playerMovement); 
-//        }
+
         //nothing to do on the client side
     }
 
@@ -46,19 +38,6 @@ public class GameClient extends Game{
         try {
             StateServer newGameState = (StateServer)connection.receiveState();
             gameState = newGameState;
-//            if (newGameState != null && playerState.tank != null)
-//            {
-//                for (Tank updatedTank:newGameState.getTanks())
-//                {
-//                    gameState.updateTank(updatedTank);
-//                }
-//                Tank updatedTank = gameState.getTank(playerState.tank.getId());
-//                if (updatedTank != null)
-//                {
-//                    playerState.updateTank(updatedTank);               
-//                }
-//            }
-            
         } catch (IOException ex) {
             GameLog.write(ex);
         }

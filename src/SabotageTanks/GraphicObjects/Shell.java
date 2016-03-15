@@ -9,21 +9,18 @@ import com.google.gson.annotations.Expose;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-/**
- *
- * @author YTokmakov
- */
     public class Shell implements GameObject
     {
-        @Expose public final int RADIUS = 5;
-        @Expose public final int DIAMETER = RADIUS * 2;
-        @Expose public final int speed = 2;        // скорость полета: пиксель/кадр
-        @Expose public final Color color = Color.DARK_GRAY;
-        @Expose private final String tankId;
-        @Expose private double x;       // координата по оси Х
-        @Expose private double y;       // координата по оси У
-        @Expose private double Xstep;       // величина изменения по оси Х в кадр
-        @Expose private double Ystep;       // величина изменения по оси У в кадр
+        transient public static final int RADIUS = 5;
+        transient public static final int DIAMETER = RADIUS * 2;
+        transient public static final int speed = 2;        // скорость полета: пиксель/кадр
+        transient public static final Color color = Color.DARK_GRAY;
+        
+        private final String tankId;
+        private double x;       // координата по оси Х
+        private double y;       // координата по оси У
+        transient private double Xstep;       // величина изменения по оси Х в кадр
+        transient private double Ystep;       // величина изменения по оси У в кадр
         
         public Shell(int straightX1,    // две точки на прямой
                      int straightY1,

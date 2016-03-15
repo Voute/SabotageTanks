@@ -14,7 +14,7 @@ import java.awt.Point;
 import SabotageTanks.Game;
 import SabotageTanks.GameLog;
 import SabotageTanks.Player;
-import SabotageTanks.PlayerState;
+import SabotageTanks.StatePlayer;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,12 +26,12 @@ public class GameControl {
     
     private Game game;
     private Tank playerTank = null;
-    private PlayerState playerState;
+    private StatePlayer playerState;
     
     public GameControl(Game game, String playerId)
     {
         this.game = game;
-        playerState = new PlayerState(playerId);
+        playerState = new StatePlayer(playerId);
     }
     
     public KeyListener getKeyListener()      // обработчик клавиш клавы
@@ -125,10 +125,10 @@ public class GameControl {
             public void mouseExited(MouseEvent e) { }
         };
     }
-    public PlayerState getPlayerState()
+    public StatePlayer getPlayerState()
     {
         try {
-            PlayerState returnState = playerState.clone();
+            StatePlayer returnState = playerState.clone();
             
             Point cursor = game.getCursorPosition();
             if (cursor != null)

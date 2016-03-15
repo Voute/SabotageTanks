@@ -14,10 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ytokmakov
- */
 public class GameServer extends Game {
     
     private List<Player> playerList;
@@ -61,29 +57,6 @@ public class GameServer extends Game {
     @Override
     protected void tick() {
         
-//        if (playerState.tank != null)
-//        {
-//            TankMovement playerMovement = control.getPlayerMovement();
-//        
-//            playerState.tank.move(playerMovement);      
-//            gameState.updateTank(playerState.tank);
-//        }
-//        
-//        if (tanksToUpdate != null)
-//        {
-//            for(Tank tank:tanksToUpdate)
-//            {
-//                gameState.updateTank(tank);
-//            }
-//            tanksToUpdate.clear();
-//        }
-//
-//        if (shellsToAdd != null && !shellsToAdd.isEmpty())
-//        {
-//            gameState.getShells().addAll(shellsToAdd);
-//            shellsToAdd.clear();
-//        }
-        
         // массив для снарядов, которые вышли за границы фрейма
         ArrayList<Shell> removeShellList = new ArrayList<Shell>();
 
@@ -126,12 +99,12 @@ public class GameServer extends Game {
     @Override
     protected void receiveState()
     {
-        List<PlayerState> states = new ArrayList<>();
+        List<StatePlayer> states = new ArrayList<>();
         
         states.add(control.getPlayerState());
                 
         try {
-            PlayerState clientState = (PlayerState)connection.receiveState();
+            StatePlayer clientState = (StatePlayer)connection.receiveState();
             if (clientState != null)
             {
                 states.add(clientState);
@@ -140,7 +113,7 @@ public class GameServer extends Game {
             GameLog.write(ex);
         }       
 
-        for (PlayerState state : states)
+        for (StatePlayer state : states)
         {
             if (state.mouseMiddlePressed)
             {

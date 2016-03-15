@@ -37,5 +37,4 @@ public class TankAnimator
         return tower;
     }
     
-    public BufferedImage getImage
 }
