@@ -10,10 +10,12 @@ and open the template in the editor.
 <tank model = "GREEN">
     <image type = "moving">GreenTank_Moving.png</image>
     <image type = "tower">GreenTank_Tower.png</image>
+    <parameter name = "some_parameter">20</parameter>
 </tank>
 <tank model = "BLUE">
     <image type = "moving">BlueTank_Moving.png</image>
     <image type = "tower">BlueTank_Tower.png</image>
+    <parameter name = "some_parameter">40</parameter>
 </tank>
 
 </tanks>

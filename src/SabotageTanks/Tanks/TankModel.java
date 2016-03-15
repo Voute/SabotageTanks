@@ -6,6 +6,7 @@
 package SabotageTanks.Tanks;
 
 import SabotageTanks.GameServer;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TankModel
@@ -17,6 +18,9 @@ public class TankModel
     public TankModel(String modelName)
     {
         name = modelName;
+        
+        images = new ArrayList<>();
+        parameters = new ArrayList<>();
     }
     
     public Tank createTank(int x, int y, GameServer gameServer, String tankId)

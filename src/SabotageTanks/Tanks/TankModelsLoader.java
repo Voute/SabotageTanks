@@ -5,6 +5,7 @@
  */
 package SabotageTanks.Tanks;
 
+import SabotageTanks.GameLog;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,13 +25,12 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TankModelsLoader extends DefaultHandler
 {
     private static final String TAG_TANK = "tank",
-                                TAG_IMAGE = "image";
+                                TAG_IMAGE = "image",
+                                TAG_PARAMETER = "parameter";
     
     private static final String XML_PATH_BEGIN = "../Images/";
     private static final String IMAGE_PATH_BEGIN = "Images/";    
     private static String XML_TANKS = "TankModels.xml";
-    private List<TankImageResources> tanksResources;
-    private List<TankAnimator> tankAnimators;
     
     private List<TankModel> tankModels;
     
@@ -38,22 +38,8 @@ public class TankModelsLoader extends DefaultHandler
     {
         tankModels = new ArrayList<>();
         
-        TankInfoParser parser = new TankInfoParser();
-        parser.loadTanksInfo();
-        
-        tankAnimators = parser.getTankAnimators();
-    }
-    
-    public TankAnimator getTankAnimator(String tankModel)
-    {
-        for (TankAnimator animator : tankAnimators)
-        {
-            if (animator.getModel().matches(tankModel))
-            {
-                return animator;
-            }
-        }
-        return null;
+        TankModelsParser parser = new TankModelsParser();
+        parser.loadTankModels();
     }
     
     public class TankImageResources
@@ -68,19 +54,18 @@ public class TankModelsLoader extends DefaultHandler
         }
     }
     
-    private class TankInfoParser extends DefaultHandler
-    {
-        List<TankAnimator> tankAnimators;
+    private class TankModelsParser extends DefaultHandler
+    {     
+        List<TankModel> tankModels;
         
-        TankAnimator currentTankAnimator;
         String currentElement;
-        List<TankImage> currentTankImages;
+        String currentAttributeValue;
+        TankModel currentTankModel;
         
-        void loadTanksInfo()
+        public List<TankModel> loadTankModels()
         {
             try {
-                tanksResources = new ArrayList<>();
-                tankAnimators = new ArrayList<>();
+                tankModels = new ArrayList<>();
                 
                 SAXParserFactory spf = SAXParserFactory.newInstance();
                 spf.setNamespaceAware(true);
@@ -96,11 +81,8 @@ public class TankModelsLoader extends DefaultHandler
             } catch (ParserConfigurationException ex) {
                 Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        List<TankAnimator> getTankAnimators()
-        {
-            return tankAnimators;
+            
+            return tankModels;
         }
         
         @Override
@@ -110,44 +92,43 @@ public class TankModelsLoader extends DefaultHandler
         }
 
         @Override
+        public void endDocument() throws SAXException {
+            super.endDocument(); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
         {
             currentElement = localName;
-
+            
             switch (localName)
             {
                 case TAG_TANK:
-                    String tankName = attributes.getValue("name");
-//                    currentTankResources = new TankImageResources(tankName);
+                    String tankModel = attributes.getValue("model");
+                    currentTankModel = new TankModel(tankModel);
                     break;
                 case TAG_IMAGE:
-                    String imageName = attributes.getValue("name");
-//                    currentTankImage = new TankImage(imageName);
+                    currentAttributeValue = attributes.getValue("type");
+                    break;
+                case TAG_PARAMETER:
+                    currentAttributeValue = attributes.getValue("name");
                     break;
             }
-        }
-
-        @Override
-        public void endDocument() throws SAXException {
-            super.endDocument(); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException
         {
             currentElement = "";
-
-//            switch (localName)
-//            {
-//                case TAG_TANK:
-//                    tanksResources.add(currentTankResources);
-//                    currentTankResources = null;
-//                    break;
-//                case TAG_IMAGE:
-//                    currentTankResources.images.add(currentTankImage);
-//                    currentTankImage = null;
-//                    break;
-//            }
+            currentAttributeValue = "";
+            
+            switch (localName)
+            {
+                case TAG_TANK:
+                    tankModels.add(currentTankModel);
+                    currentTankModel = null;
+                    break;
+            }
         }
 
         @Override
@@ -158,13 +139,20 @@ public class TankModelsLoader extends DefaultHandler
                 case TAG_IMAGE:
                     String fileName = new String(arg0, arg1, arg2);
                     try {
+                        
                         URL url = getClass().getResource(XML_PATH_BEGIN + fileName);
-                        ImageIO.read(url);
+                        TankImage image = new TankImage(currentAttributeValue, ImageIO.read(url));
+                        currentTankModel.addImage(image);
+                        
                     } catch (MalformedURLException ex) {
-                        Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
+                        GameLog.write(ex);
                     } catch (IOException ex) {
-                        Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
+                        GameLog.write(ex);
                     }
+                    break;
+                case TAG_PARAMETER:
+                    TankParameter parameter = new TankParameter(currentAttributeValue, new String(arg0, arg1, arg2));
+                    currentTankModel.addParameter(parameter);
                     break;
             }
         }

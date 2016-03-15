@@ -7,10 +7,6 @@ package SabotageTanks.Tanks;
 
 import java.awt.image.BufferedImage;
 
-/**
- *
- * @author YTokmakov
- */
     public class TankImage
     {
         public final String type;
