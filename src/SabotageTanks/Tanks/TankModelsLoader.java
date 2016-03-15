@@ -22,14 +22,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class TankModelsLoader extends DefaultHandler
+public class TankModelsLoader
 {
     private static final String TAG_TANK = "tank",
                                 TAG_IMAGE = "image",
                                 TAG_PARAMETER = "parameter";
     
-    private static final String XML_PATH_BEGIN = "../Images/";
-    private static final String IMAGE_PATH_BEGIN = "Images/";    
+//    private static final String XML_PATH_BEGIN = "../Tanks/";  
     private static String XML_TANKS = "TankModels.xml";
     
     private List<TankModel> tankModels;
@@ -39,19 +38,12 @@ public class TankModelsLoader extends DefaultHandler
         tankModels = new ArrayList<>();
         
         TankModelsParser parser = new TankModelsParser();
-        parser.loadTankModels();
+        tankModels = parser.loadTankModels();
     }
     
-    public class TankImageResources
+    public List<TankModel> getModels()
     {
-        public final String name;
-        public List<TankImage> images;
-        
-        public TankImageResources(String tankName)
-        {
-            name = tankName;
-            this.images = new ArrayList<>();
-        }
+        return tankModels;
     }
     
     private class TankModelsParser extends DefaultHandler
@@ -71,7 +63,7 @@ public class TankModelsLoader extends DefaultHandler
                 spf.setNamespaceAware(true);
                 SAXParser saxParser = spf.newSAXParser();
 
-                URL tanksXMLurl = getClass().getResource(XML_PATH_BEGIN + XML_TANKS);
+                URL tanksXMLurl = getClass().getResource(XML_TANKS);
                 saxParser.parse(tanksXMLurl.getFile(), this);
 
             } catch (SAXException ex) {
@@ -140,7 +132,7 @@ public class TankModelsLoader extends DefaultHandler
                     String fileName = new String(arg0, arg1, arg2);
                     try {
                         
-                        URL url = getClass().getResource(XML_PATH_BEGIN + fileName);
+                        URL url = getClass().getResource(fileName);
                         TankImage image = new TankImage(currentAttributeValue, ImageIO.read(url));
                         currentTankModel.addImage(image);
                         

@@ -9,8 +9,10 @@ import SabotageTanks.Control.GameControl;
 import SabotageTanks.Net.Connection;
 import SabotageTanks.Interface.BattleField;
 import SabotageTanks.Tanks.Tank;
+import SabotageTanks.Tanks.TankModel;
 import SabotageTanks.Tanks.TankModelsLoader;
 import java.awt.Point;
+import java.util.List;
 
 public abstract class Game implements Runnable
 {   
@@ -33,7 +35,8 @@ public abstract class Game implements Runnable
         this.connection = connection;
         this.player = player;
         
-//        ImageLoader imageLoader = new ImageLoader();
+        TankModelsLoader modelsLoader = new TankModelsLoader();
+        List<TankModel> models = modelsLoader.getModels();;
         
         battleField = new BattleField(WIDTH, HEIGHT, title);
         control = new GameControl(this, player.getId());
