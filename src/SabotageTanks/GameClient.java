@@ -22,8 +22,10 @@ public class GameClient extends Game{
     @Override
     protected void tick()  
     {
-
-        //nothing to do on the client side
+        for(Tank tank : gameState.getTanks())
+        {
+            tank.tick();
+        }
     }
 
     @Override
@@ -37,7 +39,7 @@ public class GameClient extends Game{
     {
         try {
             StateServer newGameState = (StateServer)connection.receiveState();
-            gameState = newGameState;
+            gameState.update(newGameState);
         } catch (IOException ex) {
             GameLog.write(ex);
         }

@@ -34,9 +34,37 @@ public final class StateServer extends State {
         return returnArray;
         
     }
+    
     public void addTank(Tank tank)
     {
         tankList.add(tank);
+    }
+    
+    public void update(StateServer update)
+    {
+        boolean success;
+        
+        for (Tank tankUpdate : update.getTanks())
+        {
+            success = false;
+            
+            for (Tank tank : tankList)
+            {
+                if ( tank.getId().matches(tankUpdate.getId()) )
+                {
+                    tank.update(tankUpdate);
+                    success = true;
+                    break;
+                }
+            }
+            
+            if (!success)
+            {
+                tankList.add(tankUpdate);
+            }
+        }
+        
+         shellList = update.getShells();
     }
     
     public void updatePlayer(StatePlayer playerControl)

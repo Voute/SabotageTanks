@@ -58,7 +58,8 @@ public class GameServer extends Game {
     protected void tick() {
         
         // массив для снарядов, которые вышли за границы фрейма
-        ArrayList<Shell> removeShellList = new ArrayList<Shell>();
+        ArrayList<Shell> removeShellList = new ArrayList<>();
+        ArrayList<Tank> removeTankList = new ArrayList<>();
 
         for (Shell shell: gameState.getShells())
         {
@@ -88,6 +89,18 @@ public class GameServer extends Game {
         // удаляем из массива снарядов вышедшие за границы экрана
         gameState.getShells().removeAll(removeShellList);  
     
+        for(Tank tank : gameState.getTanks())
+        {
+            if (tank.getReadyForResurrection())
+            {
+                removeTankList.add(tank);
+            } else
+            {
+                tank.tick();
+            }
+        }
+        
+        gameState.getTanks().removeAll(removeTankList); 
     }
 
     @Override

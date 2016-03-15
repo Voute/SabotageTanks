@@ -265,13 +265,13 @@ import java.util.List;
             return new Tank(owner.getColor(), randomX, randomY, owner.getName(), game);
         }
         
-        public void updateFields(Tank updatedTank)
+        public void update(Tank update)
         {
-            area = updatedTank.getArea();
-            Xbarrel = updatedTank.getXbarrel();
-            Ybarrel = updatedTank.getYbarrel();
-            bursting = updatedTank.getBursting();
-            readyForResurrection = updatedTank.getReadyForResurrection();
+            area = update.getArea();
+            Xbarrel = update.getXbarrel();
+            Ybarrel = update.getYbarrel();
+            bursting = update.getBursting();
+            readyForResurrection = update.getReadyForResurrection();
         }
         
         public void control(StatePlayer control)

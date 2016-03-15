@@ -17,10 +17,6 @@ import java.util.List;
  */
 public final class TankArea extends Polygon
 {
-    
-    public List<Tank.BurstPiece> burstPieces;
-    private int burstRenders;
-    
     private final double radius; 
     private double rotation;      // поворот по умолчанию        
     private double x,      // координата размещения по оси Х (центр)
