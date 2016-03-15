@@ -5,19 +5,23 @@
  */
 package SabotageTanks.Images;
 
-import SabotageTanks.Images.ImageLoader.TankImage;
+import SabotageTanks.Images.TankImage;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class TankAnimator
 {
+    private final String model;
     private BufferedImage movingSprite;
     private BufferedImage tower;
     
-    public TankAnimator(ImageLoader.TankImageResources imageResources)
+    public TankAnimator(String tankModel, List<TankImage> images)
     {
-        for (TankImage tankImage : imageResources.images)
+        model = tankModel;
+        
+        for (TankImage tankImage : images)
         {
-            switch (tankImage.name)
+            switch (tankImage.type)
             {
                 case "moving": movingSprite = tankImage.image;
                     break;
@@ -25,6 +29,11 @@ public class TankAnimator
                     break;
             }
         }
+    }
+    
+    public String getModel()
+    {
+        return model;
     }
     
     public void tick()

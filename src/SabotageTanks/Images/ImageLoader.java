@@ -28,13 +28,9 @@ public class ImageLoader extends DefaultHandler
     
     private static final String XML_PATH_BEGIN = "../Images/";
     private static final String IMAGE_PATH_BEGIN = "Images/";    
-    private static String XML_TANKS = "TankImages.xml";
+    private static String XML_TANKS = "TankModels.xml";
     private List<TankImageResources> tanksResources;
     private List<TankAnimator> tankAnimators;
-    
-    private String currentElement;
-    private TankImageResources currentTankResources;
-    private TankImage currentTankImage;
     
     public ImageLoader()
     {
@@ -44,28 +40,18 @@ public class ImageLoader extends DefaultHandler
         tankAnimators = parser.getTankAnimators();
     }
     
-    public TankAnimator getTankAnimator(String tankName)
+    public TankAnimator getTankAnimator(String tankModel)
     {
-        for (TankImageResources resource : tanksResources)
+        for (TankAnimator animator : tankAnimators)
         {
-            if (resource.name.matches(tankName))
+            if (animator.getModel().matches(tankModel))
             {
-                return new TankAnimator(resource);
+                return animator;
             }
         }
         return null;
     }
     
-    public class TankImage
-    {
-        public final String name;
-        public BufferedImage image;
-        
-        public TankImage(String imageName)
-        {
-            this.name = imageName;
-        }
-    }
     public class TankImageResources
     {
         public final String name;
@@ -82,7 +68,9 @@ public class ImageLoader extends DefaultHandler
     {
         List<TankAnimator> tankAnimators;
         
-        TankAnimator current
+        TankAnimator currentTankAnimator;
+        String currentElement;
+        List<TankImage> currentTankImages;
         
         void loadTanksInfo()
         {
@@ -126,11 +114,11 @@ public class ImageLoader extends DefaultHandler
             {
                 case TAG_TANK:
                     String tankName = attributes.getValue("name");
-                    currentTankResources = new TankImageResources(tankName);
+//                    currentTankResources = new TankImageResources(tankName);
                     break;
                 case TAG_IMAGE:
                     String imageName = attributes.getValue("name");
-                    currentTankImage = new TankImage(imageName);
+//                    currentTankImage = new TankImage(imageName);
                     break;
             }
         }
@@ -145,17 +133,17 @@ public class ImageLoader extends DefaultHandler
         {
             currentElement = "";
 
-            switch (localName)
-            {
-                case TAG_TANK:
-                    tanksResources.add(currentTankResources);
-                    currentTankResources = null;
-                    break;
-                case TAG_IMAGE:
-                    currentTankResources.images.add(currentTankImage);
-                    currentTankImage = null;
-                    break;
-            }
+//            switch (localName)
+//            {
+//                case TAG_TANK:
+//                    tanksResources.add(currentTankResources);
+//                    currentTankResources = null;
+//                    break;
+//                case TAG_IMAGE:
+//                    currentTankResources.images.add(currentTankImage);
+//                    currentTankImage = null;
+//                    break;
+//            }
         }
 
         @Override
@@ -167,7 +155,7 @@ public class ImageLoader extends DefaultHandler
                     String fileName = new String(arg0, arg1, arg2);
                     try {
                         URL url = getClass().getResource(XML_PATH_BEGIN + fileName);
-                        currentTankImage.image = ImageIO.read(url);
+                        ImageIO.read(url);
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
