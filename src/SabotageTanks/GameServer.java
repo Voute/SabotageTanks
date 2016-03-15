@@ -7,8 +7,8 @@ package SabotageTanks;
 
 import SabotageTanks.Control.TankMovement;
 import SabotageTanks.GraphicObjects.Shell;
-import SabotageTanks.GraphicObjects.Tank;
-import SabotageTanks.GraphicObjects.TankArea;
+import SabotageTanks.Tanks.Tank;
+import SabotageTanks.Tanks.TankArea;
 import SabotageTanks.Net.ConnectionServer;
 import java.io.IOException;
 import java.util.ArrayList;

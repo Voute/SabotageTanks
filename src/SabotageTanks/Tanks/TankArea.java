@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SabotageTanks.GraphicObjects;
+package SabotageTanks.Tanks;
 
-import static SabotageTanks.GraphicObjects.Tank.HEIGHT;
+import static SabotageTanks.Tanks.Tank.HEIGHT;
 import com.google.gson.annotations.Expose;
 import java.awt.Point;
 import java.awt.Polygon;

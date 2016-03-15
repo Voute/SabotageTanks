@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SabotageTanks.Images;
+package SabotageTanks.Tanks;
 
-import SabotageTanks.Images.TankImage;
+import SabotageTanks.Tanks.TankImage;
 import java.awt.image.BufferedImage;
 import java.util.List;
 

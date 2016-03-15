@@ -7,8 +7,8 @@ package SabotageTanks;
 
 import SabotageTanks.GraphicObjects.GameObject;
 import SabotageTanks.GraphicObjects.Shell;
-import SabotageTanks.GraphicObjects.Tank;
-import SabotageTanks.GraphicObjects.TankArea;
+import SabotageTanks.Tanks.Tank;
+import SabotageTanks.Tanks.TankArea;
 import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SabotageTanks.GraphicObjects;
+package SabotageTanks.Tanks;
 
 import SabotageTanks.Control.TankMovement;
 import SabotageTanks.GameLog;
 import SabotageTanks.GameServer;
+import SabotageTanks.GraphicObjects.GameObject;
+import SabotageTanks.GraphicObjects.Shell;
 import SabotageTanks.Player;
 import static SabotageTanks.Player.TANK_COLORS;
 import SabotageTanks.StatePlayer;

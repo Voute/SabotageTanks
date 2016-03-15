@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SabotageTanks.Images;
+package SabotageTanks.Tanks;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class ImageLoader extends DefaultHandler
+public class TankModelsLoader extends DefaultHandler
 {
     private static final String TAG_TANK = "tank",
                                 TAG_IMAGE = "image";
@@ -32,8 +32,12 @@ public class ImageLoader extends DefaultHandler
     private List<TankImageResources> tanksResources;
     private List<TankAnimator> tankAnimators;
     
-    public ImageLoader()
+    private List<TankModel> tankModels;
+    
+    public TankModelsLoader()
     {
+        tankModels = new ArrayList<>();
+        
         TankInfoParser parser = new TankInfoParser();
         parser.loadTanksInfo();
         
@@ -86,11 +90,11 @@ public class ImageLoader extends DefaultHandler
                 saxParser.parse(tanksXMLurl.getFile(), this);
 
             } catch (SAXException ex) {
-                Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParserConfigurationException ex) {
-                Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -157,9 +161,9 @@ public class ImageLoader extends DefaultHandler
                         URL url = getClass().getResource(XML_PATH_BEGIN + fileName);
                         ImageIO.read(url);
                     } catch (MalformedURLException ex) {
-                        Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
-                        Logger.getLogger(ImageLoader.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(TankModelsLoader.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
             }

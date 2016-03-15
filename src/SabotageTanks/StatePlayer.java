@@ -6,7 +6,7 @@
 package SabotageTanks;
 
 import SabotageTanks.GraphicObjects.Shell;
-import SabotageTanks.GraphicObjects.Tank;
+import SabotageTanks.Tanks.Tank;
 import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.Collections;

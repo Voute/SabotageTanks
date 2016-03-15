@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SabotageTanks.Images;
+package SabotageTanks.Tanks;
 
 import java.awt.image.BufferedImage;
 

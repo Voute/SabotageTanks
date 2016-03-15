@@ -7,7 +7,7 @@ package SabotageTanks.Control;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import SabotageTanks.GraphicObjects.Tank;
+import SabotageTanks.Tanks.Tank;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Point;

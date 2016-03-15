@@ -8,8 +8,8 @@ package SabotageTanks;
 import SabotageTanks.Control.GameControl;
 import SabotageTanks.Net.Connection;
 import SabotageTanks.Interface.BattleField;
-import SabotageTanks.GraphicObjects.Tank;
-import SabotageTanks.Images.ImageLoader;
+import SabotageTanks.Tanks.Tank;
+import SabotageTanks.Tanks.TankModelsLoader;
 import java.awt.Point;
 
 public abstract class Game implements Runnable

@@ -6,7 +6,7 @@
 package SabotageTanks;
 
 import SabotageTanks.Control.TankMovement;
-import SabotageTanks.GraphicObjects.Tank;
+import SabotageTanks.Tanks.Tank;
 import SabotageTanks.Net.ConnectionClient;
 import java.io.IOException;
 import java.util.logging.Level;
