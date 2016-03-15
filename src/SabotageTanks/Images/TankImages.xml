@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<tanks>
+    
+<tank name = "GREEN">
+    <image name = "moving">GreenTank_Moving.png</image>
+    <image name = "tower">GreenTank_Tower.png</image>
+</tank>
+<tank name = "BLUE">
+    <image name = "moving">BlueTank_Moving.png</image>
+    <image name = "tower">BlueTank_Tower.png</image>
+</tank>
+
+</tanks>
