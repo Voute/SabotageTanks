@@ -46,6 +46,7 @@ import java.util.List;
         transient private int burstRenders;
         transient private GameServer game;
         transient private List<BurstPiece> burstPieces;
+        transient private TankAnimator animator;
         
         public Tank(Color color, int Xaxis, int Yaxis, String tankId, GameServer gameServer)
         {

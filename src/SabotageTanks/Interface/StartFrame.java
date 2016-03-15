@@ -19,8 +19,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,10 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-/**
- *
- * @author YTokmakov
- */
 public class StartFrame extends JFrame implements ActionListener
 {
     private final String TITLE = "Welcome to Sabotage";
@@ -87,12 +89,7 @@ public class StartFrame extends JFrame implements ActionListener
         
         ipField = new JTextField();
         ipField.setColumns(14);
-        try {
-            ipField.setText(Inet4Address.getLocalHost().getHostAddress());
-        } catch (UnknownHostException ex) {
-            GameLog.write(ex);
-        }
-        
+        ipField.setText(getLocalAddress());
         
         serverRadio = new JRadioButton("server");
         serverRadio.setSelected(true);
@@ -116,6 +113,34 @@ public class StartFrame extends JFrame implements ActionListener
         setContentPane(rootPanel);
     }
 
+    private String getLocalAddress()
+    {
+        try {
+            
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            
+            while (interfaces.hasMoreElements())
+            {
+                NetworkInterface inter = interfaces.nextElement();
+                
+                Enumeration<InetAddress> addresses = inter.getInetAddresses();
+                
+                while (addresses.hasMoreElements())
+                {
+                    InetAddress address = addresses.nextElement();
+                    if (address instanceof Inet4Address && address.isSiteLocalAddress())
+                    {
+                        return address.getHostAddress();
+                    }
+                }
+            }
+            
+        } catch (SocketException ex) {
+            GameLog.write(ex);
+        }
+        return null;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {   

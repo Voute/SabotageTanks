@@ -15,10 +15,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 
-/**
- *
- * @author ytokmakov
- */
 public final class ConnectionServer extends Connection implements Runnable {
 
     private List<Player> playerList;
@@ -47,17 +43,7 @@ public final class ConnectionServer extends Connection implements Runnable {
             System.out.println(message);
             GameLog.write(message);
             initiateNegotiation(socket, serverSocket.getInetAddress().getHostAddress(), serverSocket.getLocalPort());
-//            String mess = null;
-//            while ( mess == null || !mess.matches("player") )
-//            {
-//                mess = receive();
-//            }
-//            mess = null;
-//            while ( mess == null )
-//            {
-//                mess = receive();
-//            }
-//            playerList.add( gson.fromJson(mess, Player.class) );
+
         } catch (IOException ex) {
             GameLog.write(ex);
         }

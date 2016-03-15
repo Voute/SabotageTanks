@@ -27,8 +27,7 @@ public class TankModelsLoader
     private static final String TAG_TANK = "tank",
                                 TAG_IMAGE = "image",
                                 TAG_PARAMETER = "parameter";
-    
-//    private static final String XML_PATH_BEGIN = "../Tanks/";  
+     
     private static String XML_TANKS = "TankModels.xml";
     
     private List<TankModel> tankModels;
