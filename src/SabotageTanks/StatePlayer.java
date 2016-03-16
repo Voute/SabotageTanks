@@ -5,13 +5,6 @@
  */
 package SabotageTanks;
 
-import SabotageTanks.GraphicObjects.Shell;
-import SabotageTanks.Tanks.Tank;
-import com.google.gson.annotations.Expose;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public final class StatePlayer extends State implements Cloneable {
     
     public boolean upPressed,

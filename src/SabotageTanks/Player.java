@@ -5,11 +5,7 @@
  */
 package SabotageTanks;
 
-import SabotageTanks.GraphicObjects.Shell;
-import SabotageTanks.Tanks.Tank;
-import com.google.gson.annotations.Expose;
 import java.awt.Color;
-import java.util.ArrayList;
 
 public final class Player {
     

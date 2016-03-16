@@ -7,10 +7,6 @@ package SabotageTanks.Interface;
 
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author ytokmakov
- */
 public class ShowMessage {
     
     public static void nameIsEmpty(){ showErrorMessage("Заполните имя игрока"); }

@@ -5,7 +5,6 @@
  */
 package SabotageTanks.Tanks;
 
-import SabotageTanks.Tanks.TankImage;
 import java.awt.image.BufferedImage;
 import java.util.List;
 

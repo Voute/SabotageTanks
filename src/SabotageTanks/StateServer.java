@@ -9,7 +9,6 @@ import SabotageTanks.GraphicObjects.GameObject;
 import SabotageTanks.GraphicObjects.Shell;
 import SabotageTanks.Tanks.Tank;
 import SabotageTanks.Tanks.TankArea;
-import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;

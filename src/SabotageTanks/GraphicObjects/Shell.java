@@ -5,7 +5,6 @@
  */
 package SabotageTanks.GraphicObjects;
 
-import com.google.gson.annotations.Expose;
 import java.awt.Color;
 import java.awt.Graphics2D;
 

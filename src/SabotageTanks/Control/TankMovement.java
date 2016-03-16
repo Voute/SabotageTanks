@@ -5,10 +5,6 @@
  */
 package SabotageTanks.Control;
 
-/**
- *
- * @author YTokmakov
- */
 public class TankMovement {
     
         public double movementShift = 0.0D;     // перемещение вперед-назад

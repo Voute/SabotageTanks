@@ -13,10 +13,6 @@ import SabotageTanks.StateServer;
 import java.io.IOException;
 import java.net.Socket;
 
-/**
- *
- * @author ytokmakov
- */
 public final class ConnectionClient extends Connection {
 
     public ConnectionClient(String ip, int port, Player player) throws IOException

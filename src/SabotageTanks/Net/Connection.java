@@ -14,10 +14,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- *
- * @author ytokmakov
- */
 public abstract class Connection
 {
     protected final Gson gson;

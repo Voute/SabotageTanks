@@ -6,10 +6,8 @@
 package SabotageTanks.Tanks;
 
 import static SabotageTanks.Tanks.Tank.HEIGHT;
-import com.google.gson.annotations.Expose;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.util.List;
 
 /**
  *

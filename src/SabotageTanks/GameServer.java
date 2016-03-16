@@ -5,7 +5,6 @@
  */
 package SabotageTanks;
 
-import SabotageTanks.Control.TankMovement;
 import SabotageTanks.GraphicObjects.Shell;
 import SabotageTanks.Tanks.Tank;
 import SabotageTanks.Tanks.TankArea;

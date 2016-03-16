@@ -13,11 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.Point;
 import SabotageTanks.Game;
 import SabotageTanks.GameLog;
-import SabotageTanks.Player;
 import SabotageTanks.StatePlayer;
-import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author YTokmakov

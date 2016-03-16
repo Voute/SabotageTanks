@@ -6,7 +6,6 @@
 package SabotageTanks.Tanks;
 
 import SabotageTanks.GameLog;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

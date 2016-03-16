@@ -5,12 +5,9 @@
  */
 package SabotageTanks;
 
-import SabotageTanks.Control.TankMovement;
 import SabotageTanks.Tanks.Tank;
 import SabotageTanks.Net.ConnectionClient;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameClient extends Game{
 

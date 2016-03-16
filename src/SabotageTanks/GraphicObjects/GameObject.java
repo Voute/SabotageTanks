@@ -7,10 +7,6 @@ package SabotageTanks.GraphicObjects;
 
 import java.awt.Graphics2D;
 
-/**
- *
- * @author YTokmakov
- */
 public interface GameObject {
     
     public double getCircumscribedRadius();

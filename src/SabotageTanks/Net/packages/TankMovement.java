@@ -5,10 +5,6 @@
  */
 package SabotageTanks.Net.packages;
 
-/**
- *
- * @author YTokmakov
- */
 public final class TankMovement {
     
     public static final String N = "TankMovement";
