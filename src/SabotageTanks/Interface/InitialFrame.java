@@ -21,6 +21,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import javax.swing.ButtonGroup;
@@ -30,40 +31,40 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class StartFrame extends JFrame implements ActionListener
+public class InitialFrame extends JFrame
 {
-    private final String TITLE = "Welcome to Sabotage";
+    private final String TITLE = "SabotageTanks - подключение";
     private final int FRAME_HEIGHT = 120,
                       FRAME_WIDTH = 250;
                      
     
-    private JPanel rootPanel;
-    private ButtonGroup radioGroup;
-    private JRadioButton serverRadio,
+    private final JPanel rootPanel;
+    private final ButtonGroup radioGroup;
+    private final JRadioButton serverRadio,
                          clientRadio;
                         
-    private JButton startButton;
-    private JTextField portField,
-                       nameField,
-                       ipField;
+    private final JButton startButton;
+    private final JTextField portField,
+                             nameField,
+                             ipField;
                       
     private Game game;
     
     public static void main(String[] args)       
     {
-        new StartFrame().setVisible(true);
+        new InitialFrame().setVisible(true);
     }
     
-    public StartFrame()
+    public InitialFrame()
     {
         super();
         
         try {
-            String jarPath = StartFrame.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            String jarPath = InitialFrame.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             jarPath = URLDecoder.decode(jarPath, "UTF-8");
             jarPath = jarPath.substring(1);
             GameLog.initiate(jarPath);
-        } catch (Exception ex) {
+        } catch (URISyntaxException | IOException ex) {
             GameLog.write(ex);
             ShowMessage.initiatingLogFail();
         }
@@ -77,7 +78,7 @@ public class StartFrame extends JFrame implements ActionListener
         
         nameField = new JTextField();
         nameField.setColumns(20);
-        nameField.setText("playerName");
+        nameField.setText("ИмяИгрока1");
         
         portField = new JTextField();
         portField.setColumns(4);
@@ -87,16 +88,16 @@ public class StartFrame extends JFrame implements ActionListener
         ipField.setColumns(14);
         ipField.setText(getLocalAddress());
         
-        serverRadio = new JRadioButton("server");
+        serverRadio = new JRadioButton("Сервер");
         serverRadio.setSelected(true);
-        clientRadio = new JRadioButton("client");
+        clientRadio = new JRadioButton("Клиент");
         
         radioGroup = new ButtonGroup();
         radioGroup.add(serverRadio);
         radioGroup.add(clientRadio);     
         
-        startButton = new JButton("start");
-        startButton.addActionListener(this);
+        startButton = new JButton("Старт");
+        startButton.addActionListener(getActionListener());
         
         rootPanel = new JPanel(new FlowLayout());
         rootPanel.add(nameField);
@@ -137,59 +138,70 @@ public class StartFrame extends JFrame implements ActionListener
         return null;
     }
     
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {   
-        String port = portField.getText();
-        String ip = ipField.getText();
-        String playerName = nameField.getText();
-        
-        if      (playerName == "") { ShowMessage.nameIsEmpty(); }
-        else if (port == "" || portField.getColumns() != port.length())
+    private ActionListener getActionListener()
+    {
+        return new ActionListener()
         {
-            ShowMessage.nameIsEmpty();
-        }
-        else if (ip == "" 
-//                || 14 != ip.length()
-                )
-        {
-            ShowMessage.ipIsEmpty();
-        }
-        else 
-        {
-            int intPort = Integer.parseInt(port);
-            
-            if (serverRadio.isSelected())
-            {
-                try {
-                    Player player = new Player(playerName, Player.getRandomColor());
-                    ConnectionServer connectionServer = new ConnectionServer(intPort);
-                    
-                    game = new GameServer(player, connectionServer);
-                    connectionServer.setPlayerList(((GameServer)game).getPlayerList());
-                } catch (IOException ex) {
-                    GameLog.write(ex);
-                    ShowMessage.startingServerFail();
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {   
+                String port = portField.getText();
+                String ip = ipField.getText();
+                String playerName = nameField.getText();
+
+                if      ( playerName.isEmpty() || playerName.matches("ИмяИгрока") )
+                {
+                    nameField.setText("");
+                    ShowMessage.nameIsEmpty();
                 }
-            } else
-            {
-                try {
-                    Player player = new Player(playerName + "1", Player.getRandomColor());
-                    ConnectionClient connectionClient = new ConnectionClient(ip, intPort, player);
-                    game = new GameClient(player, connectionClient);
-                } catch (IOException ex) {
-                    GameLog.write(ex);
-                    ShowMessage.connectingServerFail();
+                else if (port.isEmpty() || portField.getColumns() != port.length())
+                {
+                    ShowMessage.portIsEmpty();
                 }
+                else if (ip.isEmpty()
+        //                || 14 != ip.length()
+                        )
+                {
+                    ShowMessage.ipIsEmpty();
+                }
+                else 
+                {
+                    int intPort = Integer.parseInt(port);
+
+                    if (serverRadio.isSelected())
+                    {
+                        try {
+                            Player player = new Player(playerName, Player.getRandomColor());
+                            ConnectionServer connectionServer = new ConnectionServer(intPort);
+
+                            game = new GameServer(player, connectionServer);
+                            connectionServer.setPlayerList(((GameServer)game).getPlayerList());
+                        } catch (IOException ex) {
+                            GameLog.write(ex);
+                            ShowMessage.startingServerFail();
+                        }
+                    } else
+                    {
+                        try {
+                            Player player = new Player(playerName + "1", Player.getRandomColor());
+                            ConnectionClient connectionClient = new ConnectionClient(ip, intPort, player);
+                            game = new GameClient(player, connectionClient);
+                        } catch (IOException ex) {
+                            GameLog.write(ex);
+                            ShowMessage.connectingServerFail();
+                        }
+                    }
+
+                    if (game != null)
+                    {
+                        setVisible(false);
+                        new CustomizeFrame().setVisible(true);
+//                        game.start();
+                    }
+
+                } 
             }
-            
-            if (game != null)
-            {
-                setVisible(false);
-                game.start();
-            }
-            
-        } 
+        };
     }
     
 }
