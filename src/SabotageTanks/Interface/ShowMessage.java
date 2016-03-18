@@ -9,12 +9,12 @@ import javax.swing.JOptionPane;
 
 public class ShowMessage {
     
-    public static void nameIsEmpty(){ showErrorMessage("Заполните имя игрока"); }
+    public static void nameEmpty(){ showErrorMessage("Заполните имя игрока"); }
     public static void serverConnectFail(){ showErrorMessage("Не удалось подключиться к серверу"); }
-    public static void portIsEmpty(){ showErrorMessage("Введите порт"); }
-    public static void ipIsEmpty(){ showErrorMessage("Введите ip"); }
+    public static void portIncorrect(){ showErrorMessage("Введите корректный порт"); }
+    public static void ipIncorrect(){ showErrorMessage("Введите корректный IP адрес"); }
     public static void connectingServerFail(){ showErrorMessage("Не удалось подключиться к серверу"); }
-    public static void startingServerFail(){ showErrorMessage("Не удалось создать сервер"); }
+    public static void startingServerFail(){ showErrorMessage("Не удалось создать сервер. Попробуйте сменить порт."); }
     public static void initiatingLogFail(){ showErrorMessage("Не удалось создать лог файл"); }    
     
     private static void showErrorMessage(String message)

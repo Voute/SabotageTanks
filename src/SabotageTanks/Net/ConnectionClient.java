@@ -15,14 +15,12 @@ import java.net.Socket;
 
 public final class ConnectionClient extends Connection {
 
-    public ConnectionClient(String ip, int port, Player player) throws IOException
+    public ConnectionClient(String ip, int port) throws IOException
     {
         super();
         Socket socket =  new Socket(ip, port);
         String message = "connected to server, ip " + socket.getInetAddress().getHostAddress();
         System.out.println(message);
-//        send("player");
-//        send(gson.toJson(player));
         GameLog.write(message);
         initiateNegotiation(socket, socket.getInetAddress().getHostAddress(), socket.getLocalPort());
     }

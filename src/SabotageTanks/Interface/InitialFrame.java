@@ -5,13 +5,16 @@
  */
 package SabotageTanks.Interface;
 
+import SabotageTanks.Exceptions.InitialFrameDataIncorrectException;
 import SabotageTanks.Game;
 import SabotageTanks.GameClient;
 import SabotageTanks.GameLog;
 import SabotageTanks.GameServer;
+import SabotageTanks.Net.Connection;
 import SabotageTanks.Net.ConnectionClient;
 import SabotageTanks.Net.ConnectionServer;
 import SabotageTanks.Player;
+import SabotageTanks.Tanks.TankModelsLoader;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -110,6 +113,39 @@ public class InitialFrame extends JFrame
         setContentPane(rootPanel);
     }
 
+    private String getIP() throws InitialFrameDataIncorrectException
+    {
+        String ip = ipField.getText();
+        int countDotes = ip.length() - ip.replace(".", "").length();
+   
+        if ( countDotes != 3 || ip.length() > 15 )
+        {
+            throw new InitialFrameDataIncorrectException(InitialFrameDataIncorrectException.IP);
+        }
+        
+        return ip;
+    }
+    
+    private int getPort() throws InitialFrameDataIncorrectException
+    {
+        String portText = portField.getText();
+        
+        try
+        {        
+            int port = Integer.parseInt(portText);
+            
+            if (portText.length() == 4) { return port; } else
+            {
+                throw new InitialFrameDataIncorrectException(InitialFrameDataIncorrectException.PORT);
+            }            
+            
+        } catch(Exception ex)
+        {
+            throw new InitialFrameDataIncorrectException(InitialFrameDataIncorrectException.PORT);
+        }
+
+    }
+    
     private String getLocalAddress()
     {
         try {
@@ -138,6 +174,30 @@ public class InitialFrame extends JFrame
         return null;
     }
     
+    private ConnectionServer startServer(int port) throws IOException
+    {
+        try
+        {
+            return new ConnectionServer(port); 
+        } catch (IOException ex)
+        {
+            ShowMessage.startingServerFail();
+            throw ex;
+        }
+    }
+    
+    private ConnectionClient startClient(String ip, int port) throws IOException
+    {
+        try
+        {
+            return new ConnectionClient(ip, port);
+        } catch (IOException ex)
+        {
+            ShowMessage.connectingServerFail();
+            throw ex;
+        }
+    }
+    
     private ActionListener getActionListener()
     {
         return new ActionListener()
@@ -145,61 +205,28 @@ public class InitialFrame extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {   
-                String port = portField.getText();
-                String ip = ipField.getText();
-                String playerName = nameField.getText();
-
-                if      ( playerName.isEmpty() || playerName.matches("ИмяИгрока") )
-                {
-                    nameField.setText("");
-                    ShowMessage.nameIsEmpty();
-                }
-                else if (port.isEmpty() || portField.getColumns() != port.length())
-                {
-                    ShowMessage.portIsEmpty();
-                }
-                else if (ip.isEmpty()
-        //                || 14 != ip.length()
-                        )
-                {
-                    ShowMessage.ipIsEmpty();
-                }
-                else 
-                {
-                    int intPort = Integer.parseInt(port);
-
+                try {
+                    int port = getPort();
+                    String ip = getIP();
+                    
+                    TankModelsLoader modelsLoader = new TankModelsLoader();
+                    Connection connection = null;
+                    
                     if (serverRadio.isSelected())
                     {
-                        try {
-                            Player player = new Player(playerName, Player.getRandomColor());
-                            ConnectionServer connectionServer = new ConnectionServer(intPort);
-
-                            game = new GameServer(player, connectionServer);
-                            connectionServer.setPlayerList(((GameServer)game).getPlayerList());
-                        } catch (IOException ex) {
-                            GameLog.write(ex);
-                            ShowMessage.startingServerFail();
-                        }
-                    } else
+                        connection = startServer(port);
+                        
+                    } else if (clientRadio.isSelected())
                     {
-                        try {
-                            Player player = new Player(playerName + "1", Player.getRandomColor());
-                            ConnectionClient connectionClient = new ConnectionClient(ip, intPort, player);
-                            game = new GameClient(player, connectionClient);
-                        } catch (IOException ex) {
-                            GameLog.write(ex);
-                            ShowMessage.connectingServerFail();
-                        }
+                        connection = startClient(ip, port);
                     }
+                    
+                    new CustomizeFrame(modelsLoader, connection).setVisible(true);
+                    setVisible(false);
 
-                    if (game != null)
-                    {
-                        setVisible(false);
-                        new CustomizeFrame().setVisible(true);
-//                        game.start();
-                    }
-
-                } 
+                } catch (InitialFrameDataIncorrectException | IOException ex) {
+                    GameLog.write(ex);
+                }
             }
         };
     }

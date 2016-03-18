@@ -14,10 +14,7 @@ import java.awt.Point;
 import SabotageTanks.Game;
 import SabotageTanks.GameLog;
 import SabotageTanks.StatePlayer;
-/**
- *
- * @author YTokmakov
- */
+
 public class GameControl {
     
     private Game game;
@@ -87,30 +84,15 @@ public class GameControl {
                 if (e.getButton() == 1)     // левая кнопка мыши (shot)
                 {
                     playerState.pressedMouseLeft();
-//                    if (playerTank != null && !playerTank.getBursting())
-//                    {
-//                        playerTank.shot(e.getX(), e.getY());
-//                    }
                 }
                 else if (e.getButton() == 3 &&        // правая кнопка мыши (смена цвета)
                            playerTank != null)
                 {  
                     playerState.pressedMouseRight();
-//                    Color newColor;
-//                    do
-//                    {
-//                        newColor = Player.getRandomColor();
-//                    } while (playerTank.getColor() == newColor);
-//                    
-//                    playerTank.changeColor(newColor);
                 }
                 else if (e.getButton() == 2)        // средняя кнопка мыши (ресаем игрока)
                 {
                     playerState.pressedMouseMiddle();
-//                    if (playerTank == null || playerTank.getReadyToReset())
-//                    {
-//                        playerTank = game.generatePlayerTank();
-//                    }
                 }
             }
             @Override
@@ -140,47 +122,5 @@ public class GameControl {
             return null;
         }
     }
-//    public TankMovement getPlayerMovement()
-//    {
-//        TankMovement movement = new TankMovement();
-//        
-//        if (playerTank != null)
-//        {
-//            if (getRightPressed())      // поворот вправо
-//            {
-//                movement.rotationShift += playerTank.rotationSpeed;
-//            }
-//            if (getLeftPressed())       // поворот влево
-//            {
-//                movement.rotationShift -= playerTank.rotationSpeed;                
-//            } 
-//            if (getUpPressed())     // движение вперед
-//            {
-//                movement.movementShift -= playerTank.speed();
-//            }
-//            if (getDownPressed())   // движение назад
-//            {
-//                movement.movementShift += playerTank.speed();
-//                if (!movement.isNoRotation())      // если зажат поворот, инвертируем поворот
-//                {
-//                    movement.rotationShift = -movement.rotationShift;
-//                }
-//            }
-//            
-//            if ( movement.isNoMovement() )
-//            {
-//                playerTank.stopAcceleration();
-//            }
-//            
-//            Point cursorPoint = game.getCursorPosition();
-//            if (cursorPoint != null)
-//            {
-//                movement.cursorX = cursorPoint.x;
-//                movement.cursorY = cursorPoint.y;
-//            }
-//            
-//        }
-//        
-//        return movement;
-//    }
+
 }

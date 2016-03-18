@@ -30,6 +30,7 @@ public class TankModelsLoader
     private static String XML_TANKS = "TankModels.xml";
     
     private List<TankModel> tankModels;
+    private List<String> modelsNames;
     
     public TankModelsLoader()
     {
@@ -37,6 +38,7 @@ public class TankModelsLoader
         
         TankModelsParser parser = new TankModelsParser();
         tankModels = parser.loadTankModels();
+        modelsNames = parser.getModelsNames();
     }
     
     public List<TankModel> getModels()
@@ -44,9 +46,15 @@ public class TankModelsLoader
         return tankModels;
     }
     
+    public List<String> getModelsNames()
+    {
+        return modelsNames;
+    }
+    
     private class TankModelsParser extends DefaultHandler
     {     
         List<TankModel> tankModels;
+        List<String> modelsNames;
         
         String currentElement;
         String currentAttributeValue;
@@ -56,7 +64,8 @@ public class TankModelsLoader
         {
             try {
                 tankModels = new ArrayList<>();
-                
+                modelsNames = new ArrayList<>();
+                        
                 SAXParserFactory spf = SAXParserFactory.newInstance();
                 spf.setNamespaceAware(true);
                 SAXParser saxParser = spf.newSAXParser();
@@ -73,6 +82,11 @@ public class TankModelsLoader
             }
             
             return tankModels;
+        }
+        
+        public List<String> getModelsNames()
+        {
+            return modelsNames;
         }
         
         @Override
@@ -95,6 +109,7 @@ public class TankModelsLoader
             {
                 case TAG_TANK:
                     String tankModel = attributes.getValue("model");
+                    modelsNames.add(tankModel);
                     currentTankModel = new TankModel(tankModel);
                     break;
                 case TAG_IMAGE:

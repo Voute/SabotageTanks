@@ -17,7 +17,6 @@ import java.util.List;
 
 public final class ConnectionServer extends Connection implements Runnable {
 
-    private List<Player> playerList;
     private final ServerSocket serverSocket;
     private Player player;
     
@@ -27,11 +26,6 @@ public final class ConnectionServer extends Connection implements Runnable {
         player = null;
         serverSocket = new ServerSocket(port);
         new Thread(this).start();
-    }
-    
-    public void setPlayerList(List<Player> playerList)
-    {
-        this.playerList = playerList;
     }
     
     @Override
